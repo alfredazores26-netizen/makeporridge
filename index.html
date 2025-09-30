@@ -47,6 +47,10 @@
       margin: 15px;
       font-size: 2em;
       cursor: grab;
+      transition: transform 0.2s;
+    }
+    .ingredient:active {
+      transform: scale(1.2);
     }
     #message {
       font-size: 1.5em;
@@ -64,7 +68,7 @@
 <body>
 
   <h1>🍲 Let's Make Your Comfort Food! 🍋💛</h1>
-  <p>Drag the ingredients into the bowl to cook a cozy porridge!</p>
+  <p>Drag or tap the ingredients into the bowl to cook a cozy porridge!</p>
 
   <div id="kitchen">
     <div id="bowl">
@@ -90,8 +94,11 @@
 
     let added = 0;
 
+    // Desktop drag-drop support
     ingredients.forEach(item => {
       item.addEventListener("dragstart", dragStart);
+      // Mobile tap support
+      item.addEventListener("click", () => handleAdd(item));
     });
 
     bowl.addEventListener("dragover", e => e.preventDefault());
@@ -102,14 +109,17 @@
     }
 
     function drop(e) {
+      e.preventDefault();
       const id = e.dataTransfer.getData("id");
       const ing = document.getElementById(id);
-      if (ing) {
+      if (ing) handleAdd(ing);
+    }
+
+    function handleAdd(ing) {
+      if (ing.style.display !== "none") {
         ing.style.display = "none";
         added++;
-        if (added === ingredients.length) {
-          finishCooking();
-        }
+        if (added === ingredients.length) finishCooking();
       }
     }
 
