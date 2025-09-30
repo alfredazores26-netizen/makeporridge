@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Porridge Making 🍲💛</title>
+  <style>
+    body {
+      background: linear-gradient(#ffe8cc, #fff5e6);
+      font-family: 'Comic Sans MS', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #d67b52;
+      font-size: 2em;
+    }
+    #kitchen {
+      margin-top: 20px;
+      position: relative;
+    }
+    #bowl {
+      width: 150px;
+      height: 100px;
+      background: #f2d4a4;
+      border-radius: 0 0 80px 80px;
+      margin: 50px auto 20px;
+      position: relative;
+      border: 3px solid #d6a85e;
+    }
+    #steam {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2em;
+      opacity: 0;
+      animation: steamRise 2s infinite;
+    }
+    @keyframes steamRise {
+      0% { transform: translate(-50%, 10px); opacity: 0.3; }
+      50% { transform: translate(-50%, -20px); opacity: 1; }
+      100% { transform: translate(-50%, -40px); opacity: 0; }
+    }
+    .ingredient {
+      display: inline-block;
+      margin: 15px;
+      font-size: 2em;
+      cursor: grab;
+    }
+    #message {
+      font-size: 1.5em;
+      color: #d67b52;
+      margin-top: 30px;
+      display: none;
+      animation: pop 1s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🍲 Let's Make Your Comfort Food! 🍋💛</h1>
+  <p>Drag the ingredients into the bowl to cook a cozy porridge!</p>
+
+  <div id="kitchen">
+    <div id="bowl">
+      <div id="steam">♨️</div>
+    </div>
+  </div>
+
+  <div id="ingredients">
+    <div class="ingredient" draggable="true" id="rice">🍚</div>
+    <div class="ingredient" draggable="true" id="water">💧</div>
+    <div class="ingredient" draggable="true" id="salt">🧂</div>
+    <div class="ingredient" draggable="true" id="lime">🍋</div>
+    <div class="ingredient" draggable="true" id="love">💛</div>
+  </div>
+
+  <div id="message">Get well soon mi Dee <3 <br>Your porridge is ready! 🍲💚</div>
+
+  <script>
+    const bowl = document.getElementById("bowl");
+    const steam = document.getElementById("steam");
+    const message = document.getElementById("message");
+    const ingredients = document.querySelectorAll(".ingredient");
+
+    let added = 0;
+
+    ingredients.forEach(item => {
+      item.addEventListener("dragstart", dragStart);
+    });
+
+    bowl.addEventListener("dragover", e => e.preventDefault());
+    bowl.addEventListener("drop", drop);
+
+    function dragStart(e) {
+      e.dataTransfer.setData("id", e.target.id);
+    }
+
+    function drop(e) {
+      const id = e.dataTransfer.getData("id");
+      const ing = document.getElementById(id);
+      if (ing) {
+        ing.style.display = "none";
+        added++;
+        if (added === ingredients.length) {
+          finishCooking();
+        }
+      }
+    }
+
+    function finishCooking() {
+      steam.style.opacity = "1";
+      bowl.style.background = "#f5deb3";
+      bowl.style.border = "3px solid #c99750";
+      message.style.display = "block";
+    }
+  </script>
+</body>
+</html>
